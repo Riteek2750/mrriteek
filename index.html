@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Match Registration</title>
+    <style>
+        /* Styling as before */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #4caf50, #81c784);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="tel"],
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group button {
+            background: #4caf50;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .form-group button:hover {
+            background: #388e3c;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+
+        .success-message {
+            text-align: center;
+            color: #4caf50;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Cricket Match Registration</h2>
+        <!-- Form starts here -->
+        <form id="registrationForm" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+            <!-- Access Key Field -->
+            <input type="hidden" name="access_key" value="eee9d528-b1eb-44aa-b54b-e6a411f8435b">
+            
+            <!-- Form Fields -->
+            <div class="form-group">
+                <label for="team_name">Team Name:</label>
+                <input type="text" id="team_name" name="team_name" placeholder="Enter team name" required>
+                <span class="error" id="teamNameError"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="captain_name">Captain Name:</label>
+                <input type="text" id="captain_name" name="captain_name" placeholder="Enter captain's name" required>
+                <span class="error" id="captainNameError"></span>
+            </div>
+			
+		
+			
+
+            <div class="form-group">
+                <label for="player_names">Player Names (Comma Separated):</label>
+                <input type="text" id="player_names" name="player_names" placeholder="Player1, Player2, ..." required>
+                <span class="error" id="playerNamesError"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="contact_number">Contact Number:</label>
+                <input type="tel" id="contact_number" name="contact_number" placeholder="Enter 10-digit number" pattern="[0-9]{10}" required>
+                <span class="error" id="contactNumberError"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="aadhaar_photos">Upload Aadhaar Card Photos (Max 11):</label>
+                <input type="file" id="aadhaar_photos" name="aadhaar_photos[]" accept="image/*" multiple required>
+                <span class="error" id="aadhaarPhotosError"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="player_photos">Upload Player Photos (Max 11):</label>
+                <input type="file" id="player_photos" name="player_photos[]" accept="image/*" multiple required>
+                <span class="error" id="playerPhotosError"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="button" onclick="validateForm()">Submit Registration</button>
+            </div>
+        </form>
+        <p class="success-message" id="successMessage"></p>
+    </div>
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+
+            document.querySelectorAll(".error").forEach(error => error.textContent = "");
+
+            const teamName = document.getElementById("team_name").value.trim();
+            if (!teamName) {
+                document.getElementById("teamNameError").textContent = "Team name is required.";
+                isValid = false;
+            }
+
+            const captainName = document.getElementById("captain_name").value.trim();
+            if (!captainName) {
+                document.getElementById("captainNameError").textContent = "Captain name is required.";
+                isValid = false;
+            }
+
+            const playerNames = document.getElementById("player_names").value.trim();
+            if (!playerNames) {
+                document.getElementById("playerNamesError").textContent = "Player names are required.";
+                isValid = false;
+            }
+
+            const contactNumber = document.getElementById("contact_number").value.trim();
+            if (!/^[0-9]{10}$/.test(contactNumber)) {
+                document.getElementById("contactNumberError").textContent = "Enter a valid 10-digit number.";
+                isValid = false;
+            }
+
+            const aadhaarPhotos = document.getElementById("aadhaar_photos").files;
+            if (aadhaarPhotos.length > 11 || aadhaarPhotos.length === 0) {
+                document.getElementById("aadhaarPhotosError").textContent = "Upload up to 11 Aadhaar card photos.";
+                isValid = false;
+            }
+
+            const playerPhotos = document.getElementById("player_photos").files;
+            if (playerPhotos.length > 11 || playerPhotos.length === 0) {
+                document.getElementById("playerPhotosError").textContent = "Upload up to 11 player photos.";
+                isValid = false;
+            }
+
+            if (isValid) {
+                document.getElementById("successMessage").textContent = "Form submitted successfully!";
+                setTimeout(() => {
+                    document.getElementById("registrationForm").submit();
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
